@@ -31,7 +31,7 @@ Fluidity is a new approach to game development that uses [evsm](https://github.c
 
     states.get('object-hit')
 
-        //this state will inherit all behavior from the 'object-gravity' state
+        // this state will inherit all behavior from the 'object-gravity' state
 
         .addParent(states.get('object-gravity'))
 
