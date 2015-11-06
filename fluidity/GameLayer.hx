@@ -132,7 +132,7 @@ class GameLayer{
         var toScene = scenes.get(stateTo);
 
         states.get(stateFrom)
-            .addTransition(states.get(stateTo),eventID)
+            .setTransition(eventID,states.get(stateTo))
             .onEvent(eventID,function(l:GameLayer)
                 {
                     fromScene.layer = null;
