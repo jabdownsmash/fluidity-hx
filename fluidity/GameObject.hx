@@ -10,6 +10,8 @@ import fluidity.backends.Backend;
 
 class GameObject{
 
+    public var name:String;
+
     public var state:FState<GameObject,GameEvent>;
 
     public var position:Vec2 = new Vec2(0,0);
@@ -47,8 +49,9 @@ class GameObject{
     public var scene:GameScene;
     private var events:Array<GameEvent> = [];
 
-    public function new()
+    public function new(n:String = 'unnamedGameObject')
     {
+        name = n;
         Backend.physics.newObject(this);
     }
 
@@ -65,15 +68,37 @@ class GameObject{
         return;
     }
 
-    public function processEvent(e:GameEvent)
+    public function processEvent(?e:GameEvent, ?s:String)
     {
+        var event:GameEvent;
+        if(e == null && s == null)
+        {
+            trace("No argument given to processEvent on state " + name);
+            return this;
+        }
+        if(e != null && s != null)
+        {
+            trace("Too many arguments given to processEvent on state " + name);
+            return this;
+        }
+
+        if(e != null)
+        {
+            event = e;
+        }
+        if(s != null)
+        {
+            event = new GameEvent(s);
+        }
+        return this;
+
         if(scene != null && scene.inUpdate && state != null)
         {
-            state.processEvent(this,e);
+            state.processEvent(this,event);
         }
         else
         {
-            events.push(e);
+            events.push(event);
         }
         return this;
     }

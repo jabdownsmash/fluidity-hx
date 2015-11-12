@@ -50,10 +50,10 @@ class Input
                 switch (ev) {
                     case Object(obj,eventName):
                         var event = new GameEvent(eventName);
-                        event.pointer = new Pointer();
+                        event.pointer = new Pointer(scene);
                         obj.processEvent(event);
                     case Function(func):
-                        func(new Pointer());
+                        func(new Pointer(scene));
                     default:
                 }
             }
@@ -74,13 +74,13 @@ class Input
                         if(button == but)
                         {
                             var event = new GameEvent(eventName);
-                            event.pointer = new Pointer();
+                            event.pointer = new Pointer(scene);
                             obj.processEvent(event);
                         }
                     case ButtonFunction(but,func):
                         if(button == but)
                         {
-                            func(new Pointer());
+                            func(new Pointer(scene));
                         }
                     default:
                 }
@@ -102,13 +102,13 @@ class Input
                         if(button == but)
                         {
                             var event = new GameEvent(eventName);
-                            event.pointer = new Pointer();
+                            event.pointer = new Pointer(scene);
                             obj.processEvent(event);
                         }
                     case ButtonFunction(but,func):
                         if(button == but)
                         {
-                            func(new Pointer());
+                            func(new Pointer(scene));
                         }
                     default:
                 }

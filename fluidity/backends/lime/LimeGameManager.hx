@@ -92,19 +92,19 @@ class LimeGameManager extends Application{
 
     }
 
-    public override function onMouseMove(window,x:Float, y:Float)
+    public override function onMouseMove(window:Window,x:Float, y:Float)
     {
-        limeInput.onMouseMove(x,y);
+        limeInput.onMouseMove(x - window.width/2,y - window.height/2);
     }
 
     public override function onMouseDown(window:Window,x:Float, y:Float, button:Int)
     {
-        limeInput.onMouseDown(x,y,button);
+        limeInput.onMouseDown(x - window.width/2,y - window.height/2,button);
     }
 
     public override function onMouseUp(window:Window,x:Float, y:Float, button:Int)
     {
-        limeInput.onMouseUp(x,y,button);
+        limeInput.onMouseUp(x - window.width/2,y - window.height/2,button);
     }
 
     public function _onResize(width:Int,height:Int)
