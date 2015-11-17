@@ -192,8 +192,29 @@ class GameScene{
 
     }
 
-    public function processEvent(event:GameEvent)
+    public function processEvent(?e:GameEvent, ?s:String)
     {
+        var event:GameEvent;
+        if(e == null && s == null)
+        {
+            trace("No argument given to processEvent on scene");
+            return this;
+        }
+        if(e != null && s != null)
+        {
+            trace("Too many arguments given to processEvent on scene");
+            return this;
+        }
+
+        if(e != null)
+        {
+            event = e;
+        }
+        // if(s != null)
+        else
+        {
+            event = new GameEvent(s);
+        }
         for(obj in objects)
         {
             obj.processEvent(event);

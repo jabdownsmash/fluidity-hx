@@ -47,7 +47,6 @@ class GameObject{
     public var flip:Bool = false;
 
     public var scene:GameScene;
-    private var events:Array<GameEvent> = [];
 
     public function new(n:String = 'unnamedGameObject')
     {
@@ -55,17 +54,38 @@ class GameObject{
         Backend.physics.newObject(this);
     }
 
-    private function processEvents()
+    public function addListener(eventID:String, ?funcA:Void->Void, ?funcB:GameEvent->Void)
     {
-        for(e in events)
+        if(funcA == null && funcB == null)
         {
-            if(state != null)
-            {
-                state.processEvent(this,e);
-            }
+            trace("No argument given to addListener on object " + name);
+            return this;
         }
-        events = [];
-        return;
+        if(funcA != null && funcB != null)
+        {
+            trace("Too many arguments given to addListener on object " + name);
+            return this;
+        }
+
+        var func:GameEvent->Void;
+        if(funcA != null)
+        {
+            func = function(e:GameEvent){funcA();};
+        }
+        // if(funcB != null)
+        else
+        {
+            func = funcB;
+        }
+
+        if(!eventListeners.exists(eventID))
+        {
+            eventListeners.set(eventID,[]);
+        }
+
+        eventListeners.get(eventID).push(func);
+
+        return this;
     }
 
     public function processEvent(?e:GameEvent, ?s:String)
@@ -86,11 +106,11 @@ class GameObject{
         {
             event = e;
         }
-        if(s != null)
+        // if(s != null)
+        else
         {
             event = new GameEvent(s);
         }
-        return this;
 
         if(scene != null && scene.inUpdate && state != null)
         {
@@ -100,6 +120,15 @@ class GameObject{
         {
             events.push(event);
         }
+
+        if(eventListeners.exists(event.id))
+        {
+            for(listener in eventListeners.get(event.id))
+            {
+                listener(event);
+            }
+        }
+
         return this;
     }
 
@@ -354,9 +383,25 @@ class GameObject{
     public function addEventTrigger(eventName:String,func:GameObject->Bool)
     {
         eventTriggers.push({eventName: eventName, func: func});
+    }
+
+
+
+    private function processEvents()
+    {
+        for(e in events)
+        {
+            if(state != null)
+            {
+                state.processEvent(this,e);
+            }
+        }
+        events = [];
+        return;
     }   
 
+    private var events:Array<GameEvent> = [];
     private var attributes:StringMap<Dynamic> = new StringMap<Dynamic>();
     private var eventTriggers:Array<{eventName:String,func:GameObject->Bool}> = [];
-
+    private var eventListeners:StringMap<Array<GameEvent->Void>> = new StringMap<Array<GameEvent->Void>>();
 }
